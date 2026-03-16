@@ -1,0 +1,23 @@
+{
+    "name": "zhonght/laravel-admin-watermark",
+    "description": "Watermark extension for laravel-admin",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "encore/laravel-admin": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "YourVendor\\AdminWatermark\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zhonght\\AdminWatermark\\WatermarkServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
