@@ -4,12 +4,12 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "php": ">=7.4",
-        "encore/laravel-admin": "^1.7"
+        "php": ">=7.1",
+        "encore/laravel-admin": "~1.7"
     },
     "autoload": {
         "psr-4": {
-            "YourVendor\\AdminWatermark\\": "src/"
+            "Zhonght\\AdminWatermark\\": "src/"
         }
     },
     "extra": {
