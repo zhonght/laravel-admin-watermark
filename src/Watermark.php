@@ -55,6 +55,17 @@ STYLE;
 
         return <<<SCRIPT
 (function () {
+    // 已初始化则跳过，避免 pjax 等场景重复执行
+    if (window.__wmInitialized) {
+        // 清理多余的 wm-container（pjax 可能又注入了一个 html 片段）
+        var all = document.querySelectorAll('.wm-container');
+        for (var i = 1; i < all.length; i++) {
+            all[i].parentNode && all[i].parentNode.removeChild(all[i]);
+        }
+        return;
+    }
+    window.__wmInitialized = true;
+
     var adminName = '{$adminName}';
     var extraText = '{$extraText}';
     var canvasW   = {$canvasW};
@@ -62,7 +73,9 @@ STYLE;
     var fontSize  = {$fontSize};
     var rotate    = {$rotate};
 
-    var container = document.querySelector('.wm-container');
+    function getContainer() {
+        return document.querySelector('.wm-container');
+    }
 
     function buildDataURL(timeStr) {
         var canvas = document.createElement('canvas');
@@ -101,16 +114,17 @@ STYLE;
 
     // 防篡改：监听水印节点被移除时自动恢复
     var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (m) {
-            m.removedNodes.forEach(function (node) {
-                if (node === container) {
-                    document.body.appendChild(container);
-                }
-            });
-        });
-        // 防止 style 属性被清除
-        if (!container.parentNode) {
-            document.body.appendChild(container);
+        // 清理多余节点
+        var all = document.querySelectorAll('.wm-container');
+        for (var i = 1; i < all.length; i++) {
+            all[i].parentNode && all[i].parentNode.removeChild(all[i]);
+        }
+        // 若唯一节点被移除则重新追加
+        var container = getContainer();
+        if (!container) {
+            var el = document.createElement('div');
+            el.className = 'wm-container';
+            document.body.appendChild(el);
         }
     });
 
